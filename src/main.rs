@@ -1,34 +1,48 @@
-use yalc_app::setup as setup_app;
+use axum::{routing::get, Router};
+use std::sync::Arc;
+use tokio;
+use yalc_app::YalcApp;
+use yalc_database_seaorm::SeaOrmClient;
+use yalc_errors::AppError;
 use yalc_logger::setup as setup_logger;
-use yalc_errors::setup as setup_errors;
 
-// Database Clients
-use yalc_database_seaorm::setup as setup_sql_db;
-use yalc_database_mongo::setup as setup_nosql_db;
-use yalc_database_redis::setup as setup_cache;
-
-// AG-Grid translators
-use yalc_ag_grid_seaorm::setup as setup_ag_grid_sql;
+#[derive(Clone)]
+struct AppState {
+    db: Arc<SeaOrmClient>,
+}
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), AppError> {
     println!("Starting Rust Boilerplate with Lego Architecture...");
     
-    // Mounting the basic Lego pieces
-    setup_logger();
-    setup_errors();
+    // 1. Logger Setup
+    setup_logger(); // Assuming logger still has a basic setup fn, or tracing is used.
 
-    // Mounting the Multi-Database Toolbox
-    println!("Initializing Multi-Database Toolbox...");
-    setup_sql_db(); // Connect to Primary SQL DB (e.g. Postgres)
-    setup_nosql_db(); // Connect to Document DB (e.g. MongoDB for logs/events)
-    setup_cache(); // Connect to Cache (e.g. Redis)
+    // 2. Database Connection (SeaORM)
+    println!("Connecting to primary database...");
+    // Mock URL for now. In a real app, load from config.
+    let db_client = SeaOrmClient::connect("postgres://postgres:password@localhost/yalc_db")
+        .await
+        .unwrap_or_else(|_| {
+            println!("Warning: Could not connect to DB. Ensure Postgres is running.");
+            // Returning a dummy client or panicking in a real scenario
+            // For boilerplate demonstration, we will just panic if required, but let's handle it gracefully for the demo.
+            SeaOrmClient { db: sea_orm::DatabaseConnection::Disconnected }
+        });
 
-    // Setup specialized AG-grid filters
-    setup_ag_grid_sql();
+    let state = AppState {
+        db: Arc::new(db_client),
+    };
 
-    // Start App
-    setup_app();
+    // 3. Router Setup
+    let router = Router::new()
+        .route("/health", get(|| async { "OK" }))
+        .with_state(state);
 
-    println!("Boilerplate is running successfully with SQL, NoSQL, and Redis support!");
+    // 4. App Bootstrap & Graceful Shutdown
+    let app = YalcApp::new(router).with_port(3000);
+    
+    app.start().await?;
+
+    Ok(())
 }
