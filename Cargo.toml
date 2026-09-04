@@ -9,6 +9,7 @@ description = "A standard boilerplate utilizing rust-yalc"
 yalc-app = { path = "libs/rust-yalc/crates/yalc-app" }
 yalc-errors = { path = "libs/rust-yalc/crates/yalc-errors" }
 yalc-logger = { path = "libs/rust-yalc/crates/yalc-logger" }
+yalc-metrics = { path = "libs/rust-yalc/crates/yalc-metrics" }
 
 # Database Lego Pieces (Mix and Match!)
 yalc-database-core = { path = "libs/rust-yalc/crates/database/yalc-database-core" }
@@ -23,3 +24,4 @@ yalc-ag-grid-seaorm = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-seaor
 # Application specific dependencies
 axum = "0.7"
 tokio = { version = "1.0", features = ["full"] }
+dotenvy = "0.15"
