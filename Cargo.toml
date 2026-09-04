@@ -1,0 +1,13 @@
+[package]
+name = "rust-boilerplate"
+version = "0.1.0"
+edition = "2021"
+description = "A standard boilerplate utilizing rust-yalc"
+
+[dependencies]
+# Dependencies from rust-yalc
+rust-yalc = { path = "libs/rust-yalc" }
+
+# Application specific dependencies
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
