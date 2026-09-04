@@ -25,6 +25,13 @@ yalc-ag-grid-seaorm = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-seaor
 yalc-notifications-slack = { path = "libs/rust-yalc/crates/integrations/yalc-notifications-slack" }
 yalc-payments-stripe = { path = "libs/rust-yalc/crates/integrations/yalc-payments-stripe" }
 yalc-payments-google = { path = "libs/rust-yalc/crates/integrations/yalc-payments-google" }
+yalc-storage = { path = "libs/rust-yalc/crates/integrations/yalc-storage" }
+yalc-mailer = { path = "libs/rust-yalc/crates/integrations/yalc-mailer" }
+yalc-feature-flags = { path = "libs/rust-yalc/crates/integrations/yalc-feature-flags" }
+yalc-reports = { path = "libs/rust-yalc/crates/integrations/yalc-reports" }
+yalc-cloud-helpers = { path = "libs/rust-yalc/crates/integrations/yalc-cloud-helpers" }
+yalc-jobs = { path = "libs/rust-yalc/crates/yalc-jobs" }
+yalc-rate-limiter = { path = "libs/rust-yalc/crates/yalc-rate-limiter" }
 
 # Application specific dependencies
 axum = "0.7"
