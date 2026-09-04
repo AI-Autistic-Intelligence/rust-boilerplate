@@ -10,12 +10,16 @@ use yalc_database_seaorm::SeaOrmClient;
 use yalc_errors::AppError;
 use yalc_logger::{setup_logger, LoggerConfig};
 use yalc_metrics::setup_metrics;
+use yalc_notifications_slack::SlackClient;
+use yalc_payments_stripe::StripeClient;
 
 #[derive(Clone)]
 struct AppState {
     pub pg_db: Arc<SeaOrmClient>,
     pub mongo_db: Arc<MongoClient>,
     pub redis_db: Arc<RedisClient>,
+    pub slack: Arc<SlackClient>,
+    pub stripe: Arc<StripeClient>,
 }
 
 #[tokio::main]
@@ -27,11 +31,18 @@ async fn main() -> Result<(), AppError> {
     let pg_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env");
     let mongo_url = env::var("MONGO_URL").expect("MONGO_URL must be set in .env");
     let redis_url = env::var("REDIS_URL").expect("REDIS_URL must be set in .env");
+    
+    // Integrations Config
+    let sentry_dsn = env::var("SENTRY_DSN").ok();
+    let slack_webhook = env::var("SLACK_WEBHOOK_URL").expect("SLACK_WEBHOOK_URL must be set in .env");
+    let stripe_key = env::var("STRIPE_SECRET_KEY").expect("STRIPE_SECRET_KEY must be set in .env");
+    let stripe_webhook_secret = env::var("STRIPE_WEBHOOK_SECRET").expect("STRIPE_WEBHOOK_SECRET must be set in .env");
 
     // 2. Telemetry & Observability
-    setup_logger(LoggerConfig {
+    let _sentry_guard = setup_logger(LoggerConfig {
         service_name: "rust-boilerplate".into(),
         otlp_endpoint,
+        sentry_dsn,
     })?;
     setup_metrics()?; // Initializes Prometheus exporter
 
@@ -52,6 +63,8 @@ async fn main() -> Result<(), AppError> {
         pg_db: Arc::new(pg_client),
         mongo_db: Arc::new(mongo_client),
         redis_db: Arc::new(redis_client),
+        slack: Arc::new(SlackClient::new(&slack_webhook)),
+        stripe: Arc::new(StripeClient::new(&stripe_key, &stripe_webhook_secret)),
     };
 
     // 4. Router Setup

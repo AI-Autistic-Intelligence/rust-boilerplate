@@ -21,6 +21,11 @@ yalc-database-redis = { path = "libs/rust-yalc/crates/database/yalc-database-red
 yalc-ag-grid-core = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-core" }
 yalc-ag-grid-seaorm = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-seaorm" }
 
+# Integrations
+yalc-notifications-slack = { path = "libs/rust-yalc/crates/integrations/yalc-notifications-slack" }
+yalc-payments-stripe = { path = "libs/rust-yalc/crates/integrations/yalc-payments-stripe" }
+yalc-payments-google = { path = "libs/rust-yalc/crates/integrations/yalc-payments-google" }
+
 # Application specific dependencies
 axum = "0.7"
 tokio = { version = "1.0", features = ["full"] }
