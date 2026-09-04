@@ -1,0 +1,8 @@
+target/
+.git/
+.github/
+k8s/
+.env
+.idea/
+.vscode/
+**/*.rs.bk

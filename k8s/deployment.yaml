@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rust-boilerplate
+  labels:
+    app: rust-boilerplate
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rust-boilerplate
+  template:
+    metadata:
+      labels:
+        app: rust-boilerplate
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: rust-boilerplate
+          image: ghcr.io/your-org/rust-boilerplate:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+            - containerPort: 9000
+              name: metrics
+          # Loading secrets from K8s Secret
+          envFrom:
+            - secretRef:
+                name: rust-boilerplate-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5

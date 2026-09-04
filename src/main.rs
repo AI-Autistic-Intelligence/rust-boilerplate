@@ -3,6 +3,8 @@ use dotenvy::dotenv;
 use std::env;
 use std::sync::Arc;
 use tokio;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 use yalc_app::YalcApp;
 use yalc_database_mongo::MongoClient;
 use yalc_database_redis::RedisClient;
@@ -12,6 +14,26 @@ use yalc_logger::{setup_logger, LoggerConfig};
 use yalc_metrics::setup_metrics;
 use yalc_notifications_slack::SlackClient;
 use yalc_payments_stripe::StripeClient;
+
+#[derive(OpenApi)]
+#[openapi(
+    paths(health_check),
+    tags(
+        (name = "system", description = "System and health endpoints")
+    )
+)]
+struct ApiDoc;
+
+#[utoipa::path(
+    get,
+    path = "/health",
+    responses(
+        (status = 200, description = "Service is healthy", body = String)
+    )
+)]
+async fn health_check() -> &'static str {
+    "OK"
+}
 
 #[derive(Clone)]
 struct AppState {
@@ -67,13 +89,17 @@ async fn main() -> Result<(), AppError> {
         stripe: Arc::new(StripeClient::new(&stripe_key, &stripe_webhook_secret)),
     };
 
-    // 4. Router Setup
+    // 4. OpenAPI Setup
+    let openapi = ApiDoc::openapi();
+
+    // 5. Router Setup
     let router = Router::new()
-        .route("/health", get(|| async { "OK" }))
+        .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", openapi))
+        .route("/health", get(health_check))
         .with_state(state);
 
-    // 5. App Bootstrap & Graceful Shutdown
-    // YalcApp now automatically includes Helmet-like security (timeout, CORS, CatchPanic, HSTS).
+    // 6. App Bootstrap & Graceful Shutdown
+    // YalcApp now automatically includes Helmet-like security (timeout, CORS, CatchPanic, HSTS, Sentry).
     let app = YalcApp::new(router).with_port(3000);
     
     app.start().await?;

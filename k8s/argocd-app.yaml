@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rust-boilerplate
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/your-org/rust-boilerplate.git'
+    path: k8s
+    targetRevision: HEAD
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: rust-boilerplate-prod
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
