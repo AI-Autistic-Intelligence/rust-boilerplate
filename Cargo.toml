@@ -9,7 +9,16 @@ description = "A standard boilerplate utilizing rust-yalc"
 yalc-app = { path = "libs/rust-yalc/crates/yalc-app" }
 yalc-errors = { path = "libs/rust-yalc/crates/yalc-errors" }
 yalc-logger = { path = "libs/rust-yalc/crates/yalc-logger" }
-yalc-database = { path = "libs/rust-yalc/crates/yalc-database" }
+
+# Database Lego Pieces (Mix and Match!)
+yalc-database-core = { path = "libs/rust-yalc/crates/database/yalc-database-core" }
+yalc-database-seaorm = { path = "libs/rust-yalc/crates/database/yalc-database-seaorm" }
+yalc-database-mongo = { path = "libs/rust-yalc/crates/database/yalc-database-mongo" }
+yalc-database-redis = { path = "libs/rust-yalc/crates/database/yalc-database-redis" }
+
+# AG-Grid Translators
+yalc-ag-grid-core = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-core" }
+yalc-ag-grid-seaorm = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-seaorm" }
 
 # Application specific dependencies
 axum = "0.7"
