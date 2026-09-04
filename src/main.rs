@@ -20,13 +20,13 @@ struct AppState {
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
-    // 1. Load Environment Variables
-    dotenv().ok(); // Don't panic if .env is missing, just fallback to system env vars
+    // 1. Load Environment Variables (FORCED)
+    dotenv().expect("Failed to load .env file. Please create one with required variables.");
 
-    let otlp_endpoint = env::var("OTLP_ENDPOINT").ok();
-    let pg_url = env::var("DATABASE_URL").unwrap_or_else(|_| "postgres://postgres:password@localhost/yalc_db".to_string());
-    let mongo_url = env::var("MONGO_URL").unwrap_or_else(|_| "mongodb://localhost:27017".to_string());
-    let redis_url = env::var("REDIS_URL").unwrap_or_else(|_| "redis://localhost:6379/".to_string());
+    let otlp_endpoint = env::var("OTLP_ENDPOINT").ok(); // Optional
+    let pg_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env");
+    let mongo_url = env::var("MONGO_URL").expect("MONGO_URL must be set in .env");
+    let redis_url = env::var("REDIS_URL").expect("REDIS_URL must be set in .env");
 
     // 2. Telemetry & Observability
     setup_logger(LoggerConfig {
