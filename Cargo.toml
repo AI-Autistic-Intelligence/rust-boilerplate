@@ -5,8 +5,11 @@ edition = "2021"
 description = "A standard boilerplate utilizing rust-yalc"
 
 [dependencies]
-# Dependencies from rust-yalc
-rust-yalc = { path = "libs/rust-yalc" }
+# Yalc Core Crates (Lego Pieces)
+yalc-app = { path = "libs/rust-yalc/crates/yalc-app" }
+yalc-errors = { path = "libs/rust-yalc/crates/yalc-errors" }
+yalc-logger = { path = "libs/rust-yalc/crates/yalc-logger" }
+yalc-database = { path = "libs/rust-yalc/crates/yalc-database" }
 
 # Application specific dependencies
 axum = "0.7"
