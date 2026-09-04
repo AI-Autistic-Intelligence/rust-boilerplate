@@ -21,14 +21,7 @@ async fn main() -> Result<(), AppError> {
     // 2. Database Connection (SeaORM)
     println!("Connecting to primary database...");
     // Mock URL for now. In a real app, load from config.
-    let db_client = SeaOrmClient::connect("postgres://postgres:password@localhost/yalc_db")
-        .await
-        .unwrap_or_else(|_| {
-            println!("Warning: Could not connect to DB. Ensure Postgres is running.");
-            // Returning a dummy client or panicking in a real scenario
-            // For boilerplate demonstration, we will just panic if required, but let's handle it gracefully for the demo.
-            SeaOrmClient { db: sea_orm::DatabaseConnection::Disconnected }
-        });
+    let db_client = SeaOrmClient::connect("postgres://postgres:password@localhost/yalc_db").await?;
 
     let state = AppState {
         db: Arc::new(db_client),
