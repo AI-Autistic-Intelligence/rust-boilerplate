@@ -1,41 +1,7 @@
-[package]
-name = "rust-boilerplate"
-version = "0.1.0"
-edition = "2021"
-description = "A standard boilerplate utilizing rust-yalc"
-
-[dependencies]
-# Yalc Core Crates (Lego Pieces)
-yalc-app = { path = "libs/rust-yalc/crates/yalc-app" }
-yalc-errors = { path = "libs/rust-yalc/crates/yalc-errors" }
-yalc-logger = { path = "libs/rust-yalc/crates/yalc-logger" }
-yalc-metrics = { path = "libs/rust-yalc/crates/yalc-metrics" }
-
-# Database Lego Pieces (Mix and Match!)
-yalc-database-core = { path = "libs/rust-yalc/crates/database/yalc-database-core" }
-yalc-database-seaorm = { path = "libs/rust-yalc/crates/database/yalc-database-seaorm" }
-yalc-database-mongo = { path = "libs/rust-yalc/crates/database/yalc-database-mongo" }
-yalc-database-redis = { path = "libs/rust-yalc/crates/database/yalc-database-redis" }
-
-# AG-Grid Translators
-yalc-ag-grid-core = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-core" }
-yalc-ag-grid-seaorm = { path = "libs/rust-yalc/crates/ag-grid/yalc-ag-grid-seaorm" }
-
-# Integrations
-yalc-notifications-slack = { path = "libs/rust-yalc/crates/integrations/yalc-notifications-slack" }
-yalc-payments-stripe = { path = "libs/rust-yalc/crates/integrations/yalc-payments-stripe" }
-yalc-payments-google = { path = "libs/rust-yalc/crates/integrations/yalc-payments-google" }
-yalc-storage = { path = "libs/rust-yalc/crates/integrations/yalc-storage" }
-yalc-mailer = { path = "libs/rust-yalc/crates/integrations/yalc-mailer" }
-yalc-feature-flags = { path = "libs/rust-yalc/crates/integrations/yalc-feature-flags" }
-yalc-reports = { path = "libs/rust-yalc/crates/integrations/yalc-reports" }
-yalc-cloud-helpers = { path = "libs/rust-yalc/crates/integrations/yalc-cloud-helpers" }
-yalc-jobs = { path = "libs/rust-yalc/crates/yalc-jobs" }
-yalc-rate-limiter = { path = "libs/rust-yalc/crates/yalc-rate-limiter" }
-
-# Application specific dependencies
-axum = "0.7"
-tokio = { version = "1.0", features = ["full"] }
-dotenvy = "0.15"
-utoipa = { version = "4", features = ["axum_extras"] }
-utoipa-swagger-ui = { version = "6", features = ["axum"] }
+[workspace]
+members = [
+    "boilerplate-simple",
+    "boilerplate-sql",
+    "boilerplate-nosql",
+]
+resolver = "2"

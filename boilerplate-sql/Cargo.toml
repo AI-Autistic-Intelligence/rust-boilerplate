@@ -1,0 +1,21 @@
+[package]
+name = "boilerplate-sql"
+version = "0.1.0"
+edition = "2021"
+description = "A SQL boilerplate utilizing ferrox and SeaORM"
+
+[dependencies]
+# Ferrox Core Crates
+ferrox-app = { path = "../libs/rust-yalc/crates/ferrox-app" }
+ferrox-errors = { path = "../libs/rust-yalc/crates/ferrox-errors" }
+ferrox-logger = { path = "../libs/rust-yalc/crates/ferrox-logger" }
+ferrox-transports = { path = "../libs/rust-yalc/crates/ferrox-transports", features = ["http"] }
+
+# Database Lego Pieces
+ferrox-database-core = { path = "../libs/rust-yalc/crates/database/ferrox-database-core" }
+ferrox-database-seaorm = { path = "../libs/rust-yalc/crates/database/ferrox-database-seaorm" }
+
+# Application specific dependencies
+axum = "0.7"
+tokio = { version = "1.0", features = ["full"] }
+dotenvy = "0.15"
